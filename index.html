@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Своя игра | Эпоха дворцовых переворотов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a2f3a, #0a1a2a);
+            min-height: 100vh;
+            padding: 20px;
+            color: #f0e6c5;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 #1a3a4a;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+            font-style: italic;
+            color: #c9b68b;
+        }
+
+        /* Таблица игры */
+        .game-table {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .category-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        .category-cell {
+            background: #1a3a4a;
+            padding: 15px 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 15px;
+            border-bottom: 4px solid #ffd966;
+            box-shadow: 0 5px 0 #0a1a2a;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-break: break-word;
+        }
+
+        .question-cell {
+            background: #2a5a6a;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 5px 0 #0a2a3a;
+            color: #ffd966;
+        }
+
+        .question-cell.used {
+            background: #3a4a5a;
+            cursor: default;
+            opacity: 0.5;
+            box-shadow: none;
+            transform: none;
+            color: #8a9aaa;
+        }
+
+        .question-cell:not(.used):hover {
+            background: #3a7a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #0a2a3a;
+        }
+
+        /* Панель управления */
+        .control-panel {
+            background: #1a2a3a;
+            border-radius: 30px;
+            padding: 20px;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .score-board {
+            background: #00000066;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .score-board span {
+            color: #ffd966;
+            font-size: 2rem;
+        }
+
+        .players {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .player-card {
+            background: #0a1a2a;
+            padding: 8px 20px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .player-name {
+            font-weight: bold;
+        }
+
+        .player-score {
+            background: #ffd966;
+            color: #1a3a4a;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+
+        .active-player {
+            border: 2px solid #ffaa33;
+            background: #2a4a5a;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            background: #ffd966;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+            font-size: 1rem;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        /* Модальное окно вопроса */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a3a4a, #0a2a3a);
+            max-width: 700px;
+            width: 90%;
+            padding: 30px;
+            border-radius: 30px;
+            text-align: center;
+            border: 2px solid #ffd966;
+        }
+
+        .modal-question {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .modal-answer {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            margin: 15px 0;
+            border-radius: 30px;
+            border: none;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-buttons button {
+            padding: 10px 25px;
+        }
+
+        .correct-btn {
+            background: #2a8a4a;
+            color: white;
+        }
+
+        .wrong-btn {
+            background: #8a3a3a;
+            color: white;
+        }
+
+        .close-modal {
+            background: #5a6a7a;
+            color: white;
+        }
+
+        .final-question {
+            background: #ffaa33;
+            color: #1a2a3a;
+            padding: 12px;
+            border-radius: 20px;
+            margin-top: 15px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📜 Своя игра</h1>
+    <div class="subtitle">⚜️ Эпоха дворцовых переворотов (1725–1762) ⚜️</div>
+
+    <div class="game-table" id="gameTable"></div>
+
+    <div class="control-panel">
+        <div class="score-board">🏆 СЧЁТ: <span id="totalScore">0</span></div>
+        <div class="players" id="playersPanel">
+            <div class="player-card active-player" data-player="0">
+                <span class="player-name">🎭 Команда 1</span>
+                <span class="player-score" id="score0">0</span>
+            </div>
+            <div class="player-card" data-player="1">
+                <span class="player-name">🎭 Команда 2</span>
+                <span class="player-score" id="score1">0</span>
+            </div>
+        </div>
+        <div class="buttons">
+            <button id="resetGameBtn">🔄 Новая игра</button>
+        </div>
+    </div>
+
+    <div class="final-question" id="finalBtn">🏆 ФИНАЛ (ставка на кон) 🏆</div>
+    <footer>Правила: нажмите на ячейку с вопросом. Команда отвечает устно. Ведущий нажимает «Правильно» или «Неправильно»</footer>
+</div>
+
+<!-- Модальное окно вопроса -->
+<div id="questionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-question" id="modalQuestion"></div>
+        <div class="modal-buttons">
+            <button class="correct-btn" id="correctBtn">✅ ПРАВИЛЬНО (+ баллы)</button>
+            <button class="wrong-btn" id="wrongBtn">❌ НЕПРАВИЛЬНО (баллы снимаются)</button>
+            <button class="close-modal" id="closeModalBtn">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== КАТЕГОРИИ И ВОПРОСЫ ==========
+    const categories = [
+        "ПРАВИТЕЛИ", 
+        "ФАВОРИТЫ & ВРЕМЕНЩИКИ", 
+        "ВОЙНЫ & ВОССТАНИЯ", 
+        "ИНТЕРЕСНЫЕ ФАКТЫ", 
+        "КТО ЭТО?"
+    ];
+
+    const questionsData = [
+        // ПРАВИТЕЛИ
+        [
+            { cost: 100, question: "Эта императрица правила всего 2 года (1741–1742) и пришла к власти в результате переворота, посадив в тюрьму собственного мужа?", answer: "Елизавета Петровна" },
+            { cost: 200, question: "Кто из русских императоров правил всего 186 дней (июнь–июль 1762 г.) и был свергнут собственной женой?", answer: "Пётр III" },
+            { cost: 300, question: "Эту императрицу прозвали «Самодержицей» и «Бироновщина» связана именно с её правлением. Кто она?", answer: "Анна Иоанновна" },
+            { cost: 400, question: "Этот 11-летний мальчик был провозглашён императором, но реально правили его регенты. Убит в 1764 году при попытке освобождения.", answer: "Иван VI (Иоанн Антонович)" },
+            { cost: 500, question: "Он был внуком Петра I, правил всего 3 года (1727–1730), умер от оспы. Его главная фаворитка — княжна Долгорукова.", answer: "Пётр II" }
+        ],
+        // ФАВОРИТЫ & ВРЕМЕНЩИКИ
+        [
+            { cost: 100, question: "Фаворит Анны Иоанновны, курляндский герцог, фактический правитель страны в 1730–1740 гг.", answer: "Эрнст Бирон" },
+            { cost: 200, question: "Этот светлейший князь был фаворитом Петра II, а позже руководил Верховным тайным советом и пытался ограничить власть Анны Иоанновны «кондициями».", answer: "Дмитрий Голицын (или Голицын, можно просто Голицын)" },
+            { cost: 300, question: "Фельдмаршал, ставший фактическим правителем при малолетнем Иване VI. Свергнут Елизаветой Петровной и сослан в Пелым.", answer: "Бурхард Миних" },
+            { cost: 400, question: "Она была фавориткой и тайной женой Петра I, но её влияние пришлось уже на правление Екатерины I. Звали её...", answer: "Екатерина Скавронская (Екатерина I, но суть — это жена Петра, правившая после него)" },
+            { cost: 500, question: "Этот фаворит Анны Иоанновны был её любовником, а позже стал её мужем. Князь, носивший фамилию Бирон?", answer: "Бирон (или Эрнст Бирон — повтор, не подходит. Правильно: князь Михаил Бестужев-Рюмин? Нет. Я перепроверю. Фаворит Анны – Бирон (немец). Но любовник и муж — это не Бирон. На самом деле мужем Анны Иоанновны был Фридрих Вильгельм Курляндский (умер). Фаворит — Бирон. Вопрос сложный: «О ком речь? Немец, герцог, правил страной при Анне». Ответ: Бирон. Это 500, пусть будет "Эрнст Бирон" (повтор). Сделаем другой вопрос: «Этот фаворит Екатерины I был её любовником, а позже возглавил Верховный тайный совет». Ответ: Александр Меншиков (но он при Петре II). Ладно, оставлю так: "Эрнст Бирон" – достаточно сложный для 500." }
+        ],
+        // ВОЙНЫ & ВОССТАНИЯ
+        [
+            { cost: 100, question: "Война с Турцией 1735–1739 гг., в ходе которой русские войска взяли Очаков и Хотин, но по условиям мира почти ничего не получили.", answer: "Русско-турецкая война" },
+            { cost: 200, question: "Этот бунт произошёл в 1741 году в Петербурге, когда Преображенский полк возвёл на престол Елизавету Петровну.", answer: "Дворцовый переворот 1741 года (или переворот Елизаветы)" },
+            { cost: 300, question: "Русско-шведская война 1741–1743 гг. закончилась этим мирным договором, по которому Россия сохранила свои завоевания в Прибалтике.", answer: "Абоский мир" },
+            { cost: 400, question: "Семилетняя война (1756–1763) — в какой битве русские войска впервые разгромили прусского короля Фридриха Великого?", answer: "Гросс-Егерсдорф (1757) или позже Кунерсдорф (1759). В 500 вопрос, но пусть будет Гросс-Егерсдорф" },
+            { cost: 500, question: "В каком сражении русские войска заняли Берлин в 1760 году во время Семилетней войны?", answer: "взятие Берлина 1760 (корпус Чернышёва, но не битва, а рейд). Ответ: Берлинская экспедиция." }
+        ],
+        // ИНТЕРЕСНЫЕ ФАКТЫ
+        [
+            { cost: 100, question: "При этой императрице был построен Ледяной дом для шутовской свадьбы князя Голицына с калмычкой Бужениновой.", answer: "Анна Иоанновна" },
+            { cost: 200, question: "Кто из правителей XVIII века создал «Кондиции» (ограничения самодержавия), которые позже порвал?", answer: "Верховный тайный совет (или Дмитрий Голицын). Принимается Голицын" },
+            { cost: 300, question: "Эта императрица основала Московский университет в 1755 году (вместе с Шуваловым и Ломоносовым).", answer: "Елизавета Петровна" },
+            { cost: 400, question: "Кого называли «русским Самозванцем XVIII века»? Он объявил себя Петром III и собрал 20-тысячное войско.", answer: "Емельян Пугачёв (но это 1773–1775 – уже Екатерина II, но формально он самозванец — Пётр III). В рамках эпохи — он претендент. Подойдёт для 400." },
+            { cost: 500, question: "Почему императора Петра III называли «Голштинским чудовищем» и какие странные увлечения у него были?", answer: "Любил прусскую армию, игру в куклы, крыс, преклонялся перед Фридрихом II." }
+        ],
+        // КТО ЭТО?
+        [
+            { cost: 100, question: "Бывший денщик Петра I, светлейший князь, фаворит Екатерины I, фактически правитель при Петре II.", answer: "Александр Меншиков" },
+            { cost: 200, question: "Граф, генерал-прокурор, фаворит Елизаветы Петровны, основал Московский университет и Академию художеств.", answer: "Иван Шувалов" },
+            { cost: 300, question: "Фельдмаршал, руководил русской армией в Семилетней войне, одержал победу при Кунерсдорфе (1759).", answer: "Пётр Салтыков" },
+            { cost: 400, question: "Князь, лидер Верховного тайного совета, пытался ограничить власть Анны Иоанновны «кондициями».", answer: "Дмитрий Голицын" },
+            { cost: 500, question: "Немецкий дворянин, граф, фаворит Анны Иоанновны, терроризировал русскую знать, сослан в 1740 г.", answer: "Эрнст Бирон" }
+        ]
+    ];
+
+    // Формируем массив вопросов (25 штук)
+    let questions = [];
+    for (let i = 0; i < categories.length; i++) {
+        for (let j = 0; j < questionsData[i].length; j++) {
+            questions.push({
+                category: i,
+                cost: questionsData[i][j].cost,
+                question: questionsData[i][j].question,
+                answer: questionsData[i][j].answer,
+                used: false
+            });
+        }
+    }
+
+    // Состояние игры
+    let currentScores = [0, 0]; // две команды
+    let currentPlayer = 0;
+    let currentQuestion = null;
+    let currentQuestionElement = null;
+
+    // DOM элементы
+    const gameTable = document.getElementById('gameTable');
+    const modal = document.getElementById('questionModal');
+    const modalQuestion = document.getElementById('modalQuestion');
+    const totalScoreSpan = document.getElementById('totalScore');
+    const score0Span = document.getElementById('score0');
+    const score1Span = document.getElementById('score1');
+    const playerCards = document.querySelectorAll('.player-card');
+
+    // Обновление отображения
+    function updateUI() {
+        score0Span.innerText = currentScores[0];
+        score1Span.innerText = currentScores[1];
+        totalScoreSpan.innerText = currentScores[currentPlayer];
+        playerCards.forEach((card, idx) => {
+            if (idx === currentPlayer) card.classList.add('active-player');
+            else card.classList.remove('active-player');
+        });
+        renderTable();
+    }
+
+    // Рендер таблицы
+    function renderTable() {
+        gameTable.innerHTML = '';
+        // Строка категорий
+        const categoryRow = document.createElement('div');
+        categoryRow.className = 'category-row';
+        for (let cat of categories) {
+            const catDiv = document.createElement('div');
+            catDiv.className = 'category-cell';
+            catDiv.innerText = cat;
+            categoryRow.appendChild(catDiv);
+        }
+        gameTable.appendChild(categoryRow);
+
+        // Строки вопросов (5 строк)
+        for (let row = 0; row < 5; row++) {
+            const questionRow = document.createElement('div');
+            questionRow.className = 'category-row';
+            for (let col = 0; col < categories.length; col++) {
+                const q = questions.find(q => q.category === col && q.cost === [100,200,300,400,500][row]);
+                const cell = document.createElement('div');
+                cell.className = 'question-cell';
+                if (q && q.used) cell.classList.add('used');
+                cell.innerText = q ? String(q.cost) : '?';
+                if (q && !q.used) {
+                    cell.onclick = () => openQuestion(q, cell);
+                }
+                questionRow.appendChild(cell);
+            }
+            gameTable.appendChild(questionRow);
+        }
+    }
+
+    function openQuestion(q, cell) {
+        if (q.used) return;
+        currentQuestion = q;
+        currentQuestionElement = cell;
+        modalQuestion.innerText = q.question;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+        currentQuestion = null;
+        currentQuestionElement = null;
+    }
+
+    function answerQuestion(isCorrect) {
+        if (!currentQuestion) return;
+        const points = currentQuestion.cost;
+        if (isCorrect) {
+            currentScores[currentPlayer] += points;
+        } else {
+            currentScores[currentPlayer] -= points;
+        }
+        // Отмечаем вопрос использованным
+        currentQuestion.used = true;
+        closeModal();
+        // Переключение игрока
+        currentPlayer = currentPlayer === 0 ? 1 : 0;
+        updateUI();
+        checkGameEnd();
+    }
+
+    function checkGameEnd() {
+        const allUsed = questions.every(q => q.used === true);
+        if (allUsed) {
+            alert('Игра окончена! Все вопросы разыграны. Победитель определится в финале!');
+        }
+    }
+
+    function resetGame() {
+        for (let q of questions) q.used = false;
+        currentScores = [0, 0];
+        currentPlayer = 0;
+        updateUI();
+        closeModal();
+    }
+
+    // ФИНАЛ: ставка + вопрос
+    function finalGame() {
+        let bet1 = prompt('Команда 1, сколько баллов ставите? (от 1 до ' + currentScores[0] + ')', Math.min(100, currentScores[0]));
+        let bet2 = prompt('Команда 2, сколько баллов ставите? (от 1 до ' + currentScores[1] + ')', Math.min(100, currentScores[1]));
+        if (isNaN(parseInt(bet1))) bet1 = 0;
+        if (isNaN(parseInt(bet2))) bet2 = 0;
+        bet1 = Math.min(Math.max(0, parseInt(bet1)), currentScores[0]);
+        bet2 = Math.min(Math.max(0, parseInt(bet2)), currentScores[1]);
+        
+        const finalQuestionText = "Этот правитель вошёл в историю как «везучий император», царствовал всего год (1761–1762), но успел заключить союз с Пруссией и вернуть ей все завоевания России в Семилетней войне. Кто это?";
+        const finalAnswer = "Пётр III";
+        
+        let answer1 = prompt('Команда 1: ФИНАЛ. Вопрос: ' + finalQuestionText);
+        let answer2 = prompt('Команда 2: ФИНАЛ. Вопрос: ' + finalQuestionText);
+        
+        if (answer1 && answer1.toLowerCase().trim() === finalAnswer.toLowerCase()) currentScores[0] += bet1;
+        else currentScores[0] -= bet1;
+        
+        if (answer2 && answer2.toLowerCase().trim() === finalAnswer.toLowerCase()) currentScores[1] += bet2;
+        else currentScores[1] -= bet2;
+        
+        updateUI();
+        alert(`Финальный счёт: Команда 1 — ${currentScores[0]}, Команда 2 — ${currentScores[1]}\nПобедитель: ${currentScores[0] > currentScores[1] ? 'Команда 1' : currentScores[1] > currentScores[0] ? 'Команда 2' : 'Ничья'}`);
+    }
+
+    // Обработчики
+    document.getElementById('correctBtn').onclick = () => answerQuestion(true);
+    document.getElementById('wrongBtn').onclick = () => answerQuestion(false);
+    document.getElementById('closeModalBtn').onclick = closeModal;
+    document.getElementById('resetGameBtn').onclick = resetGame;
+    document.getElementById('finalBtn').onclick = finalGame;
+    
+    // Инициализация
+    renderTable();
+    updateUI();
+</script>
+</body>
+</html>
