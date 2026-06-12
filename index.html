@@ -30,7 +30,6 @@
             font-size: 2.2rem;
             margin-bottom: 10px;
             text-shadow: 3px 3px 0 #1a3a4a;
-            letter-spacing: 2px;
         }
 
         .subtitle {
@@ -40,7 +39,6 @@
             color: #c9b68b;
         }
 
-        /* Таблица игры */
         .game-table {
             display: flex;
             flex-direction: column;
@@ -59,15 +57,14 @@
             padding: 15px 8px;
             text-align: center;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             border-radius: 15px;
             border-bottom: 4px solid #ffd966;
             box-shadow: 0 5px 0 #0a1a2a;
-            min-height: 80px;
+            min-height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
-            word-break: break-word;
         }
 
         .question-cell {
@@ -88,7 +85,6 @@
             cursor: default;
             opacity: 0.5;
             box-shadow: none;
-            transform: none;
             color: #8a9aaa;
         }
 
@@ -98,7 +94,6 @@
             box-shadow: 0 7px 0 #0a2a3a;
         }
 
-        /* Панель управления */
         .control-panel {
             background: #1a2a3a;
             border-radius: 30px;
@@ -109,19 +104,6 @@
             justify-content: space-between;
             align-items: center;
             gap: 15px;
-        }
-
-        .score-board {
-            background: #00000066;
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .score-board span {
-            color: #ffd966;
-            font-size: 2rem;
         }
 
         .players {
@@ -137,6 +119,17 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .player-card:hover {
+            background: #2a3a4a;
+        }
+
+        .player-card.active-player {
+            border: 2px solid #ffaa33;
+            background: #2a4a5a;
         }
 
         .player-name {
@@ -149,11 +142,6 @@
             padding: 4px 12px;
             border-radius: 30px;
             font-weight: bold;
-        }
-
-        .active-player {
-            border: 2px solid #ffaa33;
-            background: #2a4a5a;
         }
 
         .buttons {
@@ -176,8 +164,7 @@
             transform: scale(0.97);
         }
 
-        /* Модальное окно вопроса */
-        .modal {
+        .modal, .setup-modal, .cat-modal, .final-modal, .final-bet-modal, .final-question-modal {
             display: none;
             position: fixed;
             top: 0;
@@ -190,7 +177,7 @@
             align-items: center;
         }
 
-        .modal-content {
+        .modal-content, .setup-content, .cat-content, .final-content {
             background: linear-gradient(135deg, #1a3a4a, #0a2a3a);
             max-width: 700px;
             width: 90%;
@@ -201,19 +188,20 @@
         }
 
         .modal-question {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             margin-bottom: 25px;
             line-height: 1.4;
         }
 
         .modal-answer {
-            width: 100%;
-            padding: 12px;
-            font-size: 1rem;
+            background: #2a5a6a;
+            padding: 15px;
+            border-radius: 20px;
             margin: 15px 0;
-            border-radius: 30px;
-            border: none;
-            text-align: center;
+            display: none;
+            font-size: 1.2rem;
+            color: #ffd966;
+            border-left: 4px solid #ffaa33;
         }
 
         .modal-buttons {
@@ -221,20 +209,24 @@
             gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 10px;
         }
 
-        .modal-buttons button {
-            padding: 10px 25px;
+        .show-answer-btn {
+            background: #3a7a8a;
+            color: white;
         }
 
         .correct-btn {
             background: #2a8a4a;
             color: white;
+            display: none;
         }
 
         .wrong-btn {
             background: #8a3a3a;
             color: white;
+            display: none;
         }
 
         .close-modal {
@@ -242,7 +234,7 @@
             color: white;
         }
 
-        .final-question {
+        .final-question-btn {
             background: #ffaa33;
             color: #1a2a3a;
             padding: 12px;
@@ -259,41 +251,118 @@
             font-size: 0.8rem;
             opacity: 0.6;
         }
+
+        .team-input {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .team-input label {
+            width: 100px;
+            text-align: left;
+        }
+        .team-input input {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: none;
+            width: 200px;
+            font-size: 1rem;
+        }
+        .team-count-select, .cat-select {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: none;
+            font-size: 1rem;
+            margin: 15px 0;
+            width: 220px;
+        }
+        .setup-buttons, .cat-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .game-description {
+            margin: 20px 0;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 20px;
+        }
+        .game-description p {
+            margin: 8px 0;
+        }
+        .final-theme-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .final-theme-btn {
+            background: #2a5a6a;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .final-theme-btn:hover {
+            background: #3a7a8a;
+        }
+        .final-bet-input {
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 20px;
+            border: none;
+            text-align: center;
+        }
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #ffaa33;
+        }
+        .final-answer-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 20px;
+            border: none;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container" id="mainGameContainer" style="display: none;">
     <h1>📜 Своя игра</h1>
     <div class="subtitle">⚜️ Эпоха дворцовых переворотов (1725–1762) ⚜️</div>
 
-    <div class="game-table" id="gameTable"></div>
+    <div id="gameTable" class="game-table"></div>
 
     <div class="control-panel">
-        <div class="score-board">🏆 СЧЁТ: <span id="totalScore">0</span></div>
-        <div class="players" id="playersPanel">
-            <div class="player-card active-player" data-player="0">
-                <span class="player-name">🎭 Команда 1</span>
-                <span class="player-score" id="score0">0</span>
-            </div>
-            <div class="player-card" data-player="1">
-                <span class="player-name">🎭 Команда 2</span>
-                <span class="player-score" id="score1">0</span>
-            </div>
-        </div>
+        <div class="players" id="playersPanel"></div>
         <div class="buttons">
             <button id="resetGameBtn">🔄 Новая игра</button>
+            <button id="setupGameBtn">⚙️ Настройка команд</button>
         </div>
     </div>
 
-    <div class="final-question" id="finalBtn">🏆 ФИНАЛ (ставка на кон) 🏆</div>
-    <footer>Правила: нажмите на ячейку с вопросом. Команда отвечает устно. Ведущий нажимает «Правильно» или «Неправильно»</footer>
+    <div class="final-question-btn" id="finalBtn">🏆 ФИНАЛ (ставка на кон) 🏆</div>
+    <footer>Правила: нажмите на ячейку с вопросом → команда отвечает устно → нажмите «Показать ответ» → затем «Правильно» или «Неправильно». Иногда попадается «Кот в мешке» — тогда вопрос передаётся другой команде, она выбирает стоимость вопроса (100 или 500).</footer>
 </div>
 
-<!-- Модальное окно вопроса -->
 <div id="questionModal" class="modal">
     <div class="modal-content">
         <div class="modal-question" id="modalQuestion"></div>
+        <div class="modal-answer" id="modalAnswer"></div>
         <div class="modal-buttons">
+            <button class="show-answer-btn" id="showAnswerBtn">📖 Показать ответ</button>
             <button class="correct-btn" id="correctBtn">✅ ПРАВИЛЬНО (+ баллы)</button>
             <button class="wrong-btn" id="wrongBtn">❌ НЕПРАВИЛЬНО (баллы снимаются)</button>
             <button class="close-modal" id="closeModalBtn">Закрыть</button>
@@ -301,214 +370,543 @@
     </div>
 </div>
 
-<script>
-    // ========== КАТЕГОРИИ И ВОПРОСЫ ==========
-    const categories = [
-        "ПРАВИТЕЛИ", 
-        "ФАВОРИТЫ & ВРЕМЕНЩИКИ", 
-        "ВОЙНЫ & ВОССТАНИЯ", 
-        "ИНТЕРЕСНЫЕ ФАКТЫ", 
-        "КТО ЭТО?"
-    ];
+<div id="setupModal" class="setup-modal">
+    <div class="setup-content">
+        <h2>📜 «Своя игра»</h2>
+        <h3>⚜️ Эпоха дворцовых переворотов (1725–1762) ⚜️</h3>
+        <div class="game-description">
+            <p>📖 <strong>О теме:</strong> 1725–1762 гг. — время, когда на российском престоле за 37 лет сменилось 6 правителей.</p>
+            <p>🎯 <strong>Правила:</strong> Команды выбирают вопросы разной стоимости. После устного ответа ведущий показывает правильный ответ и начисляет баллы.</p>
+            <p>🐱 <strong>"Кот в мешке":</strong> вопрос передаётся другой команде, она сама выбирает стоимость вопроса (100 или 500).</p>
+        </div>
+        <div>
+            <label>Количество команд (2–4): </label>
+            <select id="teamCountSelect" class="team-count-select">
+                <option value="2">2 команды</option>
+                <option value="3">3 команды</option>
+                <option value="4">4 команды</option>
+            </select>
+        </div>
+        <div id="teamNamesContainer"></div>
+        <div class="setup-buttons">
+            <button id="saveSetupBtn">🎮 Начать игру</button>
+        </div>
+    </div>
+</div>
 
+<div id="catModal" class="cat-modal">
+    <div class="cat-content">
+        <h2>🐱 Кот в мешке!</h2>
+        <p>Вы выбили «Кота в мешке»! Вопрос передаётся другой команде.</p>
+        <div id="catTeamSelectDiv"></div>
+        <div class="cat-buttons">
+            <button id="catConfirmBtn">Далее</button>
+            <button id="catCancelBtn">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<!-- ФИНАЛЬНЫЕ ОКНА -->
+<div id="finalThemeModal" class="final-modal">
+    <div class="final-content">
+        <h2>🏆 Финальный раунд</h2>
+        <p id="finalThemeMessage"></p>
+        <div id="finalThemesList" class="final-theme-list"></div>
+    </div>
+</div>
+
+<div id="finalBetModal" class="final-bet-modal">
+    <div class="final-content">
+        <h2>🏆 Финальный раунд</h2>
+        <p>Тема: <strong id="finalSelectedTheme"></strong></p>
+        <div id="betsInputs"></div>
+        <button id="finalBetConfirmBtn">Подтвердить ставки и начать вопрос</button>
+    </div>
+</div>
+
+<div id="finalQuestionModal" class="final-question-modal">
+    <div class="final-content">
+        <h2>🏆 Финальный вопрос</h2>
+        <p><strong id="finalQuestionText"></strong></p>
+        <div class="timer" id="finalTimer">00:30</div>
+        <div id="finalAnswersInputs"></div>
+        <button id="finalAnswerConfirmBtn">Завершить и проверить</button>
+    </div>
+</div>
+
+<script>
+    const categories = ["ПРАВИТЕЛИ", "ФАВОРИТЫ", "ВОЙНЫ", "ИНТЕРЕСНЫЕ ФАКТЫ", "КТО ЭТО?"];
+    
+    // Финальные усложнённые вопросы по каждой теме
+    const finalQuestionsData = {
+        "ПРАВИТЕЛИ": { question: "Этот император правил всего 186 дней (июнь–июль 1762 г.), был свергнут собственной женой и убит. Кто это?", answer: "Пётр III" },
+        "ФАВОРИТЫ": { question: "Фаворит Анны Иоанновны, курляндский герцог, фактический правитель страны в 1730–1740 гг. Его имя стало символом засилья иностранцев.", answer: "Эрнст Бирон" },
+        "ВОЙНЫ": { question: "В ходе Семилетней войны русские войска в 1760 году заняли столицу Пруссии. Какой город?", answer: "Берлин" },
+        "ИНТЕРЕСНЫЕ ФАКТЫ": { question: "При какой императрице был построен знаменитый Ледяной дом для шутовской свадьбы князя Голицына?", answer: "Анна Иоанновна" },
+        "КТО ЭТО?": { question: "Князь, лидер Верховного тайного совета, автор «кондиций», пытавшихся ограничить власть императрицы. Кто это?", answer: "Дмитрий Голицын" }
+    };
+    
     const questionsData = [
-        // ПРАВИТЕЛИ
-        [
+        [ // Правители
             { cost: 100, question: "Эта императрица правила всего 2 года (1741–1742) и пришла к власти в результате переворота, посадив в тюрьму собственного мужа?", answer: "Елизавета Петровна" },
             { cost: 200, question: "Кто из русских императоров правил всего 186 дней (июнь–июль 1762 г.) и был свергнут собственной женой?", answer: "Пётр III" },
-            { cost: 300, question: "Эту императрицу прозвали «Самодержицей» и «Бироновщина» связана именно с её правлением. Кто она?", answer: "Анна Иоанновна" },
-            { cost: 400, question: "Этот 11-летний мальчик был провозглашён императором, но реально правили его регенты. Убит в 1764 году при попытке освобождения.", answer: "Иван VI (Иоанн Антонович)" },
-            { cost: 500, question: "Он был внуком Петра I, правил всего 3 года (1727–1730), умер от оспы. Его главная фаворитка — княжна Долгорукова.", answer: "Пётр II" }
+            { cost: 300, question: "Эту императрицу прозвали «Самодержицей», и «Бироновщина» связана с её правлением. Кто она?", answer: "Анна Иоанновна" },
+            { cost: 400, question: "Этот 11-летний мальчик был провозглашён императором, но реально правили регенты. Убит в 1764 году.", answer: "Иван VI (Иоанн Антонович)" },
+            { cost: 500, question: "Внук Петра I, правил всего 3 года (1727–1730), умер от оспы.", answer: "Пётр II" }
         ],
-        // ФАВОРИТЫ & ВРЕМЕНЩИКИ
-        [
-            { cost: 100, question: "Фаворит Анны Иоанновны, курляндский герцог, фактический правитель страны в 1730–1740 гг.", answer: "Эрнст Бирон" },
-            { cost: 200, question: "Этот светлейший князь был фаворитом Петра II, а позже руководил Верховным тайным советом и пытался ограничить власть Анны Иоанновны «кондициями».", answer: "Дмитрий Голицын (или Голицын, можно просто Голицын)" },
-            { cost: 300, question: "Фельдмаршал, ставший фактическим правителем при малолетнем Иване VI. Свергнут Елизаветой Петровной и сослан в Пелым.", answer: "Бурхард Миних" },
-            { cost: 400, question: "Она была фавориткой и тайной женой Петра I, но её влияние пришлось уже на правление Екатерины I. Звали её...", answer: "Екатерина Скавронская (Екатерина I, но суть — это жена Петра, правившая после него)" },
-            { cost: 500, question: "Этот фаворит Анны Иоанновны был её любовником, а позже стал её мужем. Князь, носивший фамилию Бирон?", answer: "Бирон (или Эрнст Бирон — повтор, не подходит. Правильно: князь Михаил Бестужев-Рюмин? Нет. Я перепроверю. Фаворит Анны – Бирон (немец). Но любовник и муж — это не Бирон. На самом деле мужем Анны Иоанновны был Фридрих Вильгельм Курляндский (умер). Фаворит — Бирон. Вопрос сложный: «О ком речь? Немец, герцог, правил страной при Анне». Ответ: Бирон. Это 500, пусть будет "Эрнст Бирон" (повтор). Сделаем другой вопрос: «Этот фаворит Екатерины I был её любовником, а позже возглавил Верховный тайный совет». Ответ: Александр Меншиков (но он при Петре II). Ладно, оставлю так: "Эрнст Бирон" – достаточно сложный для 500." }
+        [ // Фавориты
+            { cost: 100, question: "Фаворит Анны Иоанновны, курляндский герцог, фактический правитель страны в 1730–1740 гг.", answer: "Эрнст Бирон", isCat: true },
+            { cost: 200, question: "Этот светлейший князь был фаворитом Петра II, а позже руководил Верховным тайным советом.", answer: "Дмитрий Голицын" },
+            { cost: 300, question: "Фельдмаршал, ставший фактическим правителем при малолетнем Иване VI. Свергнут Елизаветой Петровной.", answer: "Бурхард Миних" },
+            { cost: 400, question: "Бывший денщик Петра I, светлейший князь, правитель при Петре II.", answer: "Александр Меншиков" },
+            { cost: 500, question: "Граф, фаворит Елизаветы Петровны, основал Московский университет и Академию художеств.", answer: "Иван Шувалов" }
         ],
-        // ВОЙНЫ & ВОССТАНИЯ
-        [
-            { cost: 100, question: "Война с Турцией 1735–1739 гг., в ходе которой русские войска взяли Очаков и Хотин, но по условиям мира почти ничего не получили.", answer: "Русско-турецкая война" },
-            { cost: 200, question: "Этот бунт произошёл в 1741 году в Петербурге, когда Преображенский полк возвёл на престол Елизавету Петровну.", answer: "Дворцовый переворот 1741 года (или переворот Елизаветы)" },
-            { cost: 300, question: "Русско-шведская война 1741–1743 гг. закончилась этим мирным договором, по которому Россия сохранила свои завоевания в Прибалтике.", answer: "Абоский мир" },
-            { cost: 400, question: "Семилетняя война (1756–1763) — в какой битве русские войска впервые разгромили прусского короля Фридриха Великого?", answer: "Гросс-Егерсдорф (1757) или позже Кунерсдорф (1759). В 500 вопрос, но пусть будет Гросс-Егерсдорф" },
-            { cost: 500, question: "В каком сражении русские войска заняли Берлин в 1760 году во время Семилетней войны?", answer: "взятие Берлина 1760 (корпус Чернышёва, но не битва, а рейд). Ответ: Берлинская экспедиция." }
+        [ // Войны
+            { cost: 100, question: "Русско-турецкая война 1735–1739 гг., в ходе которой русские взяли Очаков.", answer: "Русско-турецкая война" },
+            { cost: 200, question: "Дворцовый переворот 1741 года, в результате которого на престол взошла Елизавета Петровна.", answer: "Переворот 1741" },
+            { cost: 300, question: "Мирный договор, завершивший русско-шведскую войну 1741–1743 гг.", answer: "Абоский мир" },
+            { cost: 400, question: "Сражение Семилетней войны, в котором русские впервые разгромили прусского короля Фридриха II.", answer: "Гросс-Егерсдорф" },
+            { cost: 500, question: "Взятие Берлина русскими войсками в 1760 году (кто командовал корпусом?)", answer: "Чернышёв (Захар Чернышёв)" }
         ],
-        // ИНТЕРЕСНЫЕ ФАКТЫ
-        [
-            { cost: 100, question: "При этой императрице был построен Ледяной дом для шутовской свадьбы князя Голицына с калмычкой Бужениновой.", answer: "Анна Иоанновна" },
-            { cost: 200, question: "Кто из правителей XVIII века создал «Кондиции» (ограничения самодержавия), которые позже порвал?", answer: "Верховный тайный совет (или Дмитрий Голицын). Принимается Голицын" },
-            { cost: 300, question: "Эта императрица основала Московский университет в 1755 году (вместе с Шуваловым и Ломоносовым).", answer: "Елизавета Петровна" },
-            { cost: 400, question: "Кого называли «русским Самозванцем XVIII века»? Он объявил себя Петром III и собрал 20-тысячное войско.", answer: "Емельян Пугачёв (но это 1773–1775 – уже Екатерина II, но формально он самозванец — Пётр III). В рамках эпохи — он претендент. Подойдёт для 400." },
-            { cost: 500, question: "Почему императора Петра III называли «Голштинским чудовищем» и какие странные увлечения у него были?", answer: "Любил прусскую армию, игру в куклы, крыс, преклонялся перед Фридрихом II." }
+        [ // Интересные факты
+            { cost: 100, question: "При какой императрице был построен Ледяной дом для шутовской свадьбы?", answer: "Анна Иоанновна" },
+            { cost: 200, question: "Кто из правителей XVIII века пытался ограничить самодержавие «кондициями»?", answer: "Верховный тайный совет (Голицын)" },
+            { cost: 300, question: "Эта императрица основала Московский университет в 1755 году.", answer: "Елизавета Петровна" },
+            { cost: 400, question: "Кого называли «русским Самозванцем XVIII века», объявив себя Петром III?", answer: "Емельян Пугачёв", isCat: true },
+            { cost: 500, question: "Почему императора Петра III называли «Голштинским чудовищем»?", answer: "Любил прусскую армию и Фридриха II" }
         ],
-        // КТО ЭТО?
-        [
-            { cost: 100, question: "Бывший денщик Петра I, светлейший князь, фаворит Екатерины I, фактически правитель при Петре II.", answer: "Александр Меншиков" },
-            { cost: 200, question: "Граф, генерал-прокурор, фаворит Елизаветы Петровны, основал Московский университет и Академию художеств.", answer: "Иван Шувалов" },
-            { cost: 300, question: "Фельдмаршал, руководил русской армией в Семилетней войне, одержал победу при Кунерсдорфе (1759).", answer: "Пётр Салтыков" },
-            { cost: 400, question: "Князь, лидер Верховного тайного совета, пытался ограничить власть Анны Иоанновны «кондициями».", answer: "Дмитрий Голицын" },
-            { cost: 500, question: "Немецкий дворянин, граф, фаворит Анны Иоанновны, терроризировал русскую знать, сослан в 1740 г.", answer: "Эрнст Бирон" }
+        [ // Кто это?
+            { cost: 100, question: "Сподвижник Петра I, светлейший князь, фактический правитель при Екатерине I.", answer: "Александр Меншиков" },
+            { cost: 200, question: "Фельдмаршал, руководил армией в Семилетней войне, одержал победу при Кунерсдорфе.", answer: "Пётр Салтыков", isCat: true },
+            { cost: 300, question: "Князь, лидер Верховного тайного совета, автор «кондиций».", answer: "Дмитрий Голицын" },
+            { cost: 400, question: "Граф, генерал-прокурор, фаворит Елизаветы Петровны.", answer: "Иван Шувалов" },
+            { cost: 500, question: "Немецкий дворянин, граф, фаворит Анны Иоанновны, сослан в 1740 году.", answer: "Эрнст Бирон" }
         ]
     ];
 
-    // Формируем массив вопросов (25 штук)
     let questions = [];
-    for (let i = 0; i < categories.length; i++) {
-        for (let j = 0; j < questionsData[i].length; j++) {
-            questions.push({
-                category: i,
-                cost: questionsData[i][j].cost,
-                question: questionsData[i][j].question,
-                answer: questionsData[i][j].answer,
-                used: false
-            });
+    let currentScores = [];
+    let currentPlayer = 0;
+    let currentQuestion = null;
+    let currentQuestionCost = null;
+    let answerRevealed = false;
+    let teamNames = ["Команда 1", "Команда 2"];
+    let teamCount = 2;
+    
+    let pendingCatQuestion = null;
+    let catTargetTeam = null;
+    let catCost = null;
+
+    // Финальные переменные
+    let finalQualifiedTeams = [];
+    let finalRemainingThemes = [...categories];
+    let finalSelectedTheme = null;
+    let finalQuestionObj = null;
+    let finalBets = [];
+    let finalAnswers = [];
+
+    function initQuestions() {
+        questions = [];
+        for (let i = 0; i < categories.length; i++) {
+            for (let j = 0; j < questionsData[i].length; j++) {
+                questions.push({
+                    category: i,
+                    cost: questionsData[i][j].cost,
+                    question: questionsData[i][j].question,
+                    answer: questionsData[i][j].answer,
+                    used: false,
+                    isCat: questionsData[i][j].isCat || false
+                });
+            }
         }
     }
 
-    // Состояние игры
-    let currentScores = [0, 0]; // две команды
-    let currentPlayer = 0;
-    let currentQuestion = null;
-    let currentQuestionElement = null;
-
-    // DOM элементы
-    const gameTable = document.getElementById('gameTable');
-    const modal = document.getElementById('questionModal');
-    const modalQuestion = document.getElementById('modalQuestion');
-    const totalScoreSpan = document.getElementById('totalScore');
-    const score0Span = document.getElementById('score0');
-    const score1Span = document.getElementById('score1');
-    const playerCards = document.querySelectorAll('.player-card');
-
-    // Обновление отображения
     function updateUI() {
-        score0Span.innerText = currentScores[0];
-        score1Span.innerText = currentScores[1];
-        totalScoreSpan.innerText = currentScores[currentPlayer];
-        playerCards.forEach((card, idx) => {
-            if (idx === currentPlayer) card.classList.add('active-player');
-            else card.classList.remove('active-player');
-        });
+        for (let i = 0; i < teamCount; i++) {
+            const scoreSpan = document.getElementById(`score${i}`);
+            if (scoreSpan) scoreSpan.innerText = currentScores[i];
+        }
+        const playersPanel = document.getElementById('playersPanel');
+        playersPanel.innerHTML = '';
+        for (let i = 0; i < teamCount; i++) {
+            const card = document.createElement('div');
+            card.className = `player-card ${i === currentPlayer ? 'active-player' : ''}`;
+            card.setAttribute('data-player', i);
+            card.onclick = () => switchPlayer(i);
+            card.innerHTML = `
+                <span class="player-name">🎭 ${teamNames[i]}</span>
+                <span class="player-score" id="score${i}">${currentScores[i]}</span>
+            `;
+            playersPanel.appendChild(card);
+        }
         renderTable();
     }
 
-    // Рендер таблицы
     function renderTable() {
-        gameTable.innerHTML = '';
-        // Строка категорий
-        const categoryRow = document.createElement('div');
-        categoryRow.className = 'category-row';
-        for (let cat of categories) {
-            const catDiv = document.createElement('div');
-            catDiv.className = 'category-cell';
-            catDiv.innerText = cat;
-            categoryRow.appendChild(catDiv);
-        }
-        gameTable.appendChild(categoryRow);
-
-        // Строки вопросов (5 строк)
+        const container = document.getElementById('gameTable');
+        container.innerHTML = '';
+        const catRow = document.createElement('div');
+        catRow.className = 'category-row';
+        categories.forEach(cat => {
+            const div = document.createElement('div');
+            div.className = 'category-cell';
+            div.innerText = cat;
+            catRow.appendChild(div);
+        });
+        container.appendChild(catRow);
+        
         for (let row = 0; row < 5; row++) {
-            const questionRow = document.createElement('div');
-            questionRow.className = 'category-row';
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'category-row';
             for (let col = 0; col < categories.length; col++) {
                 const q = questions.find(q => q.category === col && q.cost === [100,200,300,400,500][row]);
                 const cell = document.createElement('div');
                 cell.className = 'question-cell';
                 if (q && q.used) cell.classList.add('used');
-                cell.innerText = q ? String(q.cost) : '?';
+                cell.innerText = q ? q.cost : '?';
                 if (q && !q.used) {
-                    cell.onclick = () => openQuestion(q, cell);
+                    cell.onclick = () => openQuestionWrapper(q, cell);
                 }
-                questionRow.appendChild(cell);
+                rowDiv.appendChild(cell);
             }
-            gameTable.appendChild(questionRow);
+            container.appendChild(rowDiv);
         }
     }
 
-    function openQuestion(q, cell) {
+    function openQuestionWrapper(q, cell) {
+        if (q.used) return;
+        if (q.isCat) {
+            pendingCatQuestion = q;
+            showCatModal();
+        } else {
+            currentQuestionCost = q.cost;
+            openQuestion(q);
+        }
+    }
+
+    function showCatModal() {
+        const container = document.getElementById('catTeamSelectDiv');
+        container.innerHTML = `
+            <select id="catTeamSelect" class="cat-select">
+                ${Array(teamCount).fill().map((_, i) => i !== currentPlayer ? `<option value="${i}">${teamNames[i]}</option>` : '').join('')}
+            </select>
+            <div style="margin: 15px 0;">
+                <p>Выберите стоимость вопроса:</p>
+                <select id="catCostSelect" class="cat-select">
+                    <option value="100">100 баллов</option>
+                    <option value="500">500 баллов</option>
+                </select>
+            </div>
+        `;
+        document.getElementById('catModal').style.display = 'flex';
+    }
+
+    function confirmCat() {
+        catTargetTeam = parseInt(document.getElementById('catTeamSelect').value);
+        catCost = parseInt(document.getElementById('catCostSelect').value);
+        document.getElementById('catModal').style.display = 'none';
+        currentQuestionCost = catCost;
+        openQuestion(pendingCatQuestion);
+    }
+
+    function cancelCat() {
+        document.getElementById('catModal').style.display = 'none';
+        pendingCatQuestion = null;
+        catTargetTeam = null;
+        catCost = null;
+        currentQuestionCost = null;
+    }
+
+    function openQuestion(q) {
         if (q.used) return;
         currentQuestion = q;
-        currentQuestionElement = cell;
-        modalQuestion.innerText = q.question;
-        modal.style.display = 'flex';
+        answerRevealed = false;
+        document.getElementById('modalQuestion').innerText = q.question;
+        document.getElementById('modalAnswer').innerHTML = "";
+        document.getElementById('modalAnswer').style.display = 'none';
+        document.getElementById('showAnswerBtn').style.display = 'inline-block';
+        document.getElementById('correctBtn').style.display = 'none';
+        document.getElementById('wrongBtn').style.display = 'none';
+        document.getElementById('questionModal').style.display = 'flex';
+    }
+
+    function showAnswer() {
+        if (!currentQuestion) return;
+        document.getElementById('modalAnswer').innerHTML = `<strong>✅ Правильный ответ:</strong><br><br>${currentQuestion.answer}`;
+        document.getElementById('modalAnswer').style.display = 'block';
+        document.getElementById('showAnswerBtn').style.display = 'none';
+        document.getElementById('correctBtn').style.display = 'inline-block';
+        document.getElementById('wrongBtn').style.display = 'inline-block';
+        answerRevealed = true;
     }
 
     function closeModal() {
-        modal.style.display = 'none';
+        document.getElementById('questionModal').style.display = 'none';
         currentQuestion = null;
-        currentQuestionElement = null;
+        currentQuestionCost = null;
+        answerRevealed = false;
+        pendingCatQuestion = null;
+        catTargetTeam = null;
+        catCost = null;
     }
 
     function answerQuestion(isCorrect) {
         if (!currentQuestion) return;
-        const points = currentQuestion.cost;
-        if (isCorrect) {
-            currentScores[currentPlayer] += points;
-        } else {
-            currentScores[currentPlayer] -= points;
+        if (!answerRevealed) {
+            alert("Сначала нажмите «Показать ответ»!");
+            return;
         }
-        // Отмечаем вопрос использованным
+        
+        let answeringTeam = (pendingCatQuestion && catTargetTeam !== null) ? catTargetTeam : currentPlayer;
+        let points = (pendingCatQuestion && catCost !== null) ? catCost : currentQuestion.cost;
+        
+        if (isCorrect) currentScores[answeringTeam] += points;
+        else currentScores[answeringTeam] -= points;
+        
         currentQuestion.used = true;
+        
+        currentPlayer = (currentPlayer + 1) % teamCount;
+        
         closeModal();
-        // Переключение игрока
-        currentPlayer = currentPlayer === 0 ? 1 : 0;
         updateUI();
-        checkGameEnd();
-    }
-
-    function checkGameEnd() {
-        const allUsed = questions.every(q => q.used === true);
-        if (allUsed) {
-            alert('Игра окончена! Все вопросы разыграны. Победитель определится в финале!');
+        
+        if (questions.every(q => q.used)) {
+            startFinalRound();
         }
     }
 
     function resetGame() {
-        for (let q of questions) q.used = false;
-        currentScores = [0, 0];
+        if (teamCount === 0) return;
+        initQuestions();
+        currentScores = new Array(teamCount).fill(0);
         currentPlayer = 0;
         updateUI();
         closeModal();
     }
 
-    // ФИНАЛ: ставка + вопрос
-    function finalGame() {
-        let bet1 = prompt('Команда 1, сколько баллов ставите? (от 1 до ' + currentScores[0] + ')', Math.min(100, currentScores[0]));
-        let bet2 = prompt('Команда 2, сколько баллов ставите? (от 1 до ' + currentScores[1] + ')', Math.min(100, currentScores[1]));
-        if (isNaN(parseInt(bet1))) bet1 = 0;
-        if (isNaN(parseInt(bet2))) bet2 = 0;
-        bet1 = Math.min(Math.max(0, parseInt(bet1)), currentScores[0]);
-        bet2 = Math.min(Math.max(0, parseInt(bet2)), currentScores[1]);
-        
-        const finalQuestionText = "Этот правитель вошёл в историю как «везучий император», царствовал всего год (1761–1762), но успел заключить союз с Пруссией и вернуть ей все завоевания России в Семилетней войне. Кто это?";
-        const finalAnswer = "Пётр III";
-        
-        let answer1 = prompt('Команда 1: ФИНАЛ. Вопрос: ' + finalQuestionText);
-        let answer2 = prompt('Команда 2: ФИНАЛ. Вопрос: ' + finalQuestionText);
-        
-        if (answer1 && answer1.toLowerCase().trim() === finalAnswer.toLowerCase()) currentScores[0] += bet1;
-        else currentScores[0] -= bet1;
-        
-        if (answer2 && answer2.toLowerCase().trim() === finalAnswer.toLowerCase()) currentScores[1] += bet2;
-        else currentScores[1] -= bet2;
-        
-        updateUI();
-        alert(`Финальный счёт: Команда 1 — ${currentScores[0]}, Команда 2 — ${currentScores[1]}\nПобедитель: ${currentScores[0] > currentScores[1] ? 'Команда 1' : currentScores[1] > currentScores[0] ? 'Команда 2' : 'Ничья'}`);
+    function switchPlayer(playerIdx) {
+        if (playerIdx < teamCount) {
+            currentPlayer = playerIdx;
+            updateUI();
+        }
     }
 
-    // Обработчики
+    // ФИНАЛЬНЫЙ РАУНД
+    function startFinalRound() {
+        finalQualifiedTeams = [];
+        for (let i = 0; i < teamCount; i++) {
+            if (currentScores[i] > 0) finalQualifiedTeams.push(i);
+        }
+        if (finalQualifiedTeams.length === 0) {
+            alert("Ни одна команда не имеет положительного счёта. Финальный раунд не состоится.");
+            return;
+        }
+        // Сортируем команды по возрастанию счёта
+        finalQualifiedTeams.sort((a,b) => currentScores[a] - currentScores[b]);
+        finalRemainingThemes = [...categories];
+        showThemeElimination();
+    }
+
+    function showThemeElimination() {
+        if (finalRemainingThemes.length === 1) {
+            finalSelectedTheme = finalRemainingThemes[0];
+            finalQuestionObj = finalQuestionsData[finalSelectedTheme];
+            startBettingRound();
+            return;
+        }
+        
+        const currentTeamIdx = finalQualifiedTeams[0]; // текущая команда, которая удаляет тему (от меньшего счёта)
+        const teamName = teamNames[currentTeamIdx];
+        
+        document.getElementById('finalThemeMessage').innerHTML = `${teamName} (счёт: ${currentScores[currentTeamIdx]}) убирает одну тему:`;
+        const container = document.getElementById('finalThemesList');
+        container.innerHTML = '';
+        finalRemainingThemes.forEach(theme => {
+            const btn = document.createElement('div');
+            btn.className = 'final-theme-btn';
+            btn.innerText = theme;
+            btn.onclick = () => {
+                finalRemainingThemes = finalRemainingThemes.filter(t => t !== theme);
+                // Перемещаем команду в конец очереди
+                finalQualifiedTeams.push(finalQualifiedTeams.shift());
+                showThemeElimination();
+            };
+            container.appendChild(btn);
+        });
+        document.getElementById('finalThemeModal').style.display = 'flex';
+    }
+
+    function startBettingRound() {
+        document.getElementById('finalThemeModal').style.display = 'none';
+        document.getElementById('finalSelectedTheme').innerText = finalSelectedTheme;
+        const betsContainer = document.getElementById('betsInputs');
+        betsContainer.innerHTML = '';
+        finalBets = new Array(teamCount).fill(0);
+        
+        for (let i = 0; i < teamCount; i++) {
+            if (currentScores[i] > 0) {
+                const div = document.createElement('div');
+                div.style.margin = "10px 0";
+                div.innerHTML = `
+                    <label>${teamNames[i]} (счёт: ${currentScores[i]}): ставка (1-${currentScores[i]}, можно "ва-банк" = все баллы): </label>
+                    <input type="number" id="bet_${i}" min="1" max="${currentScores[i]}" step="1" class="final-bet-input">
+                `;
+                betsContainer.appendChild(div);
+            } else {
+                const div = document.createElement('div');
+                div.style.margin = "10px 0";
+                div.innerHTML = `<label>${teamNames[i]} (счёт: 0) — не участвует в финале.</label>`;
+                betsContainer.appendChild(div);
+            }
+        }
+        document.getElementById('finalBetModal').style.display = 'flex';
+    }
+
+    function confirmBets() {
+        for (let i = 0; i < teamCount; i++) {
+            if (currentScores[i] > 0) {
+                const input = document.getElementById(`bet_${i}`);
+                let bet = parseInt(input.value);
+                if (isNaN(bet)) bet = 1;
+                if (bet < 1) bet = 1;
+                if (bet > currentScores[i]) bet = currentScores[i];
+                finalBets[i] = bet;
+            } else {
+                finalBets[i] = 0;
+            }
+        }
+        document.getElementById('finalBetModal').style.display = 'none';
+        startFinalQuestion();
+    }
+
+    function startFinalQuestion() {
+        document.getElementById('finalQuestionText').innerText = finalQuestionObj.question;
+        const answersContainer = document.getElementById('finalAnswersInputs');
+        answersContainer.innerHTML = '';
+        finalAnswers = new Array(teamCount).fill("");
+        
+        for (let i = 0; i < teamCount; i++) {
+            if (currentScores[i] > 0) {
+                const div = document.createElement('div');
+                div.style.margin = "10px 0";
+                div.innerHTML = `
+                    <label>${teamNames[i]}: </label>
+                    <input type="text" id="answer_${i}" class="final-answer-input" placeholder="Введите ответ">
+                `;
+                answersContainer.appendChild(div);
+            }
+        }
+        
+        document.getElementById('finalQuestionModal').style.display = 'flex';
+        
+        let timeLeft = 30;
+        const timerElement = document.getElementById('finalTimer');
+        const interval = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.innerText = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                collectFinalAnswers();
+            }
+            timeLeft--;
+        }, 1000);
+        window.finalTimerInterval = interval;
+    }
+
+    function collectFinalAnswers() {
+        if (window.finalTimerInterval) clearInterval(window.finalTimerInterval);
+        for (let i = 0; i < teamCount; i++) {
+            if (currentScores[i] > 0) {
+                const input = document.getElementById(`answer_${i}`);
+                finalAnswers[i] = input ? input.value.trim() : "";
+            }
+        }
+        document.getElementById('finalQuestionModal').style.display = 'none';
+        checkFinalAnswers();
+    }
+
+    function checkFinalAnswers() {
+        let results = [];
+        for (let teamIdx of finalQualifiedTeams) {
+            const isCorrect = (finalAnswers[teamIdx].toLowerCase() === finalQuestionObj.answer.toLowerCase());
+            if (isCorrect) {
+                currentScores[teamIdx] += finalBets[teamIdx];
+                results.push(`${teamNames[teamIdx]}: ✅ ПРАВИЛЬНО! +${finalBets[teamIdx]} баллов. Новый счёт: ${currentScores[teamIdx]}`);
+            } else {
+                currentScores[teamIdx] -= finalBets[teamIdx];
+                results.push(`${teamNames[teamIdx]}: ❌ НЕПРАВИЛЬНО. Правильный ответ: "${finalQuestionObj.answer}". -${finalBets[teamIdx]} баллов. Новый счёт: ${currentScores[teamIdx]}`);
+            }
+        }
+        
+        updateUI();
+        let finalMessage = "🏆 РЕЗУЛЬТАТЫ ФИНАЛЬНОГО РАУНДА 🏆\n\n" + results.join("\n\n");
+        let maxScore = Math.max(...currentScores);
+        let winners = [];
+        for (let i = 0; i < teamCount; i++) {
+            if (currentScores[i] === maxScore) winners.push(teamNames[i]);
+        }
+        finalMessage += `\n\n🏅 Победитель${winners.length > 1 ? 'и' : ''}: ${winners.join(', ')} с ${maxScore} баллами!`;
+        alert(finalMessage);
+    }
+
+    function startGameWithSetup() {
+        document.getElementById('setupModal').style.display = 'flex';
+        updateTeamNamesInputs();
+    }
+
+    function updateTeamNamesInputs() {
+        const count = parseInt(document.getElementById('teamCountSelect').value);
+        const container = document.getElementById('teamNamesContainer');
+        container.innerHTML = '';
+        for (let i = 0; i < count; i++) {
+            const div = document.createElement('div');
+            div.className = 'team-input';
+            div.innerHTML = `
+                <label>Команда ${i+1}:</label>
+                <input type="text" id="teamName${i}" placeholder="Название команды ${i+1}" value="Команда ${i+1}">
+            `;
+            container.appendChild(div);
+        }
+    }
+
+    function saveSetup() {
+        teamCount = parseInt(document.getElementById('teamCountSelect').value);
+        teamNames = [];
+        for (let i = 0; i < teamCount; i++) {
+            let name = document.getElementById(`teamName${i}`).value.trim();
+            if (name === "") name = `Команда ${i+1}`;
+            teamNames.push(name);
+        }
+        document.getElementById('setupModal').style.display = 'none';
+        document.getElementById('mainGameContainer').style.display = 'block';
+        initQuestions();
+        currentScores = new Array(teamCount).fill(0);
+        currentPlayer = 0;
+        updateUI();
+    }
+
+    document.getElementById('showAnswerBtn').onclick = showAnswer;
     document.getElementById('correctBtn').onclick = () => answerQuestion(true);
     document.getElementById('wrongBtn').onclick = () => answerQuestion(false);
     document.getElementById('closeModalBtn').onclick = closeModal;
     document.getElementById('resetGameBtn').onclick = resetGame;
-    document.getElementById('finalBtn').onclick = finalGame;
-    
-    // Инициализация
-    renderTable();
-    updateUI();
+    document.getElementById('setupGameBtn').onclick = startGameWithSetup;
+    document.getElementById('finalBtn').onclick = () => {
+        if (questions.every(q => q.used)) {
+            startFinalRound();
+        } else {
+            alert("Финальный раунд доступен только после того, как все вопросы основного тура будут разыграны.");
+        }
+    };
+    document.getElementById('teamCountSelect').onchange = updateTeamNamesInputs;
+    document.getElementById('saveSetupBtn').onclick = saveSetup;
+    document.getElementById('catConfirmBtn').onclick = confirmCat;
+    document.getElementById('catCancelBtn').onclick = cancelCat;
+    document.getElementById('finalBetConfirmBtn').onclick = confirmBets;
+    document.getElementById('finalAnswerConfirmBtn').onclick = collectFinalAnswers;
+
+    startGameWithSetup();
 </script>
 </body>
 </html>
