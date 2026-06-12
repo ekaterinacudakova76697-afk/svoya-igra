@@ -428,7 +428,6 @@
     <div class="final-content">
         <h2>🏆 Финальный вопрос</h2>
         <p><strong id="finalQuestionText"></strong></p>
-        <div class="timer" id="finalTimer">00:30</div>
         <div id="finalAnswersInputs"></div>
         <button id="finalAnswerConfirmBtn">Завершить и проверить</button>
     </div>
@@ -781,42 +780,27 @@
     }
 
     function startFinalQuestion() {
-        document.getElementById('finalQuestionText').innerText = finalQuestionObj.question;
-        const answersContainer = document.getElementById('finalAnswersInputs');
-        answersContainer.innerHTML = '';
-        finalAnswers = new Array(teamCount).fill("");
-        
-        for (let i = 0; i < teamCount; i++) {
-            if (currentScores[i] > 0) {
-                const div = document.createElement('div');
-                div.style.margin = "10px 0";
-                div.innerHTML = `
-                    <label>${teamNames[i]}: </label>
-                    <input type="text" id="answer_${i}" class="final-answer-input" placeholder="Введите ответ">
-                `;
-                answersContainer.appendChild(div);
-            }
+    document.getElementById('finalQuestionText').innerText = finalQuestionObj.question;
+    const answersContainer = document.getElementById('finalAnswersInputs');
+    answersContainer.innerHTML = '';
+    finalAnswers = new Array(teamCount).fill("");
+    
+    for (let i = 0; i < teamCount; i++) {
+        if (currentScores[i] > 0) {
+            const div = document.createElement('div');
+            div.style.margin = "10px 0";
+            div.innerHTML = `
+                <label>${teamNames[i]}: </label>
+                <input type="text" id="answer_${i}" class="final-answer-input" placeholder="Введите ответ">
+            `;
+            answersContainer.appendChild(div);
         }
-        
-        document.getElementById('finalQuestionModal').style.display = 'flex';
-        
-        let timeLeft = 30;
-        const timerElement = document.getElementById('finalTimer');
-        const interval = setInterval(() => {
-            const minutes = Math.floor(timeLeft / 60);
-            const seconds = timeLeft % 60;
-            timerElement.innerText = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                collectFinalAnswers();
-            }
-            timeLeft--;
-        }, 1000);
-        window.finalTimerInterval = interval;
     }
+    
+    document.getElementById('finalQuestionModal').style.display = 'flex';
+}
 
     function collectFinalAnswers() {
-        if (window.finalTimerInterval) clearInterval(window.finalTimerInterval);
         for (let i = 0; i < teamCount; i++) {
             if (currentScores[i] > 0) {
                 const input = document.getElementById(`answer_${i}`);
